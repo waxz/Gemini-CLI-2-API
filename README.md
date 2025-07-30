@@ -1,6 +1,6 @@
 <div align="center">
 
-# Gemini-CLI-2-API 🚀
+# AIClient-2-API 🚀
 
 **一个能将多种大模型 API（Gemini, OpenAI, Claude...）统一封装为本地 OpenAI 兼容接口的强大代理。**
 
@@ -204,6 +204,12 @@
         ```
 
 *更多启动参数，请参考 `src/api-server.js` 文件顶部的注释。*
+
+---
+
+## 🐳 Docker 部署
+
+项目支持通过 Docker 进行部署，详细指南请参阅 [Docker部署指南](./README.Docker.md)。
 
 ---
 
