@@ -14,6 +14,7 @@ const CODE_ASSIST_ENDPOINT = 'https://cloudcode-pa.googleapis.com';
 const CODE_ASSIST_API_VERSION = 'v1internal';
 const OAUTH_CLIENT_ID = '681255809395-oo8ft2oprdrnp9e3aqf6av3hmdib135j.apps.googleusercontent.com';
 const OAUTH_CLIENT_SECRET = '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';
+const GEMINI_MODELS = ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
 
 function toGeminiApiResponse(codeAssistResponse) {
     if (!codeAssistResponse) return null;
@@ -45,7 +46,7 @@ export class GeminiApiService {
             this.projectId = await this.discoverProjectAndModels();
         } else {
             console.log(`[Gemini] Using provided Project ID: ${this.projectId}`);
-            this.availableModels = ['gemini-2.5-pro', 'gemini-2.5-flash'];
+            this.availableModels = GEMINI_MODELS;
             console.log(`[Gemini] Using fixed models: [${this.availableModels.join(', ')}]`);
         }
         if (this.projectId === 'default') {
@@ -155,7 +156,7 @@ export class GeminiApiService {
         }
 
         console.log('[Gemini] Discovering Project ID...');
-        this.availableModels = ['gemini-2.5-pro', 'gemini-2.5-flash'];
+        this.availableModels = GEMINI_MODELS;
         console.log(`[Gemini] Using fixed models: [${this.availableModels.join(', ')}]`);
         try {
             const loadResponse = await this.callApi('loadCodeAssist', { metadata: { pluginType: 'GEMINI' } });
@@ -202,8 +203,17 @@ export class GeminiApiService {
                 responseType: "json",
                 body: JSON.stringify(body),
             };
-            const res = await this.authClient.request(requestOptions);
-            return res.data;
+            try{
+                const res = await this.authClient.request(requestOptions);
+                return res.data;
+            }catch (error){
+                console.log(`[API] Received error ${error}`);
+                return {
+                    response:`[API] Received error ${error}`
+                };
+
+            }
+          
         } catch (error) {
             if (error.response?.status === 401 && !isRetry) {
                 console.log('[API] Received 401. Refreshing auth and retrying...');

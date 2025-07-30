@@ -18,6 +18,7 @@
     "supertest": "^6.3.3"
   },
   "scripts": {
+    "start": "node src/api-server.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
